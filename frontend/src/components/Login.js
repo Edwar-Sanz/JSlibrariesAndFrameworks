@@ -1,4 +1,4 @@
-import handleLoginSubmit from "../handlers/handleLoginSubmit"
+import handleLoginSubmit from "./handlers/handleLoginSubmit"
 import { useNavigate } from "react-router-dom";
 
 function Login() {

@@ -89,7 +89,7 @@ app.post("/api/login", async (req, res) => {
         return res.status(401).json({ message: 'Inicio de sesión fallido' });
       }
 
-      jwt.sign({ username: user.username }, 'secretKey', { expiresIn: 120 }, (err, token) => {
+      jwt.sign({ username: user.username }, 'secretKey', { expiresIn: 30 }, (err, token) => {
         return res.status(200).json({ token: token }); //retorna el token
       });
     });
@@ -108,13 +108,12 @@ app.get('/authorizer', (req, res) => {
     }
     jwt.verify(bearerToken, "secretKey", (error) => {
       if (error) {
-        return res.status(403).json({ error: error.message, isLogged: false });
+        return res.status(403).json({ error: error.message, isLogged: false, a:"a" });
       } else {
         return res.status(200).json({ message: "Acceso permitido", isLogged: true });
       }
       });
   } catch (error) {
-    
     console.log("**********ERROR********** " + error);
     return res.status(500).send({ error: error.message });
   }
