@@ -7,11 +7,14 @@ function RuteValidator({ redirectPath = "/" }) {
 
   useEffect(() => {
     async function checkAuthorization() {
-      const token = localStorage.getItem("token");
+      const accessToken = localStorage.getItem("accessToken");
+      const refreshToken = localStorage.getItem("refreshToken");
 
-      let header = new Headers();
-      header.append("Authorization", `Bearer ${token}`);
-
+      let header = new Headers({
+        "Authorization": `Bearer ${accessToken}`,
+        "refreshToken": refreshToken
+      });
+      
       let requestOptions = {
         method: "GET",
         headers: header,
@@ -21,8 +24,14 @@ function RuteValidator({ redirectPath = "/" }) {
       try {
         const req = await fetch("http://127.0.0.1:3030/authorizer",requestOptions);
         const res = await req.json();
-        console.log(`Acceso permitido??? ${res.isLogged}`);
-        setLoggedIn(res.isLogged); // true o false dependiendo de la respuesta del server
+        if (res.token) {// si hay tocken
+          localStorage.setItem("accessToken",  res.token.accessToken ) //manda token al localStorage
+          localStorage.setItem("refreshToken", res.token.refreshToken) //manda token al localStorage
+        }
+        if (res.isLogged) {
+          console.log(`Acceso permitido??? ${res.isLogged}`);
+          setLoggedIn(res.isLogged); // true o false dependiendo de la respuesta del server
+        }
       } catch (error) {
         console.log(`error: \n ********${error.message}********`);
         setLoggedIn(false); // si hay error false

@@ -89,9 +89,9 @@ app.post("/api/login", async (req, res) => {
         return res.status(401).json({ message: 'Inicio de sesión fallido' });
       }
 
-      jwt.sign({ username: user.username }, 'secretKey', { expiresIn: 30 }, (err, token) => {
-        return res.status(200).json({ token: token }); //retorna el token
-      });
+      const accessToken = jwt.sign({ username: user.username }, 'accessSecret', { expiresIn: 60 });
+      const refreshToken = jwt.sign({ username: user.username }, 'refreshSecret', { expiresIn: "8h" });
+      res.status(200).json({"token": {"accessToken": accessToken, "refreshToken": refreshToken}}); //retorna el token
     });
   } catch (error) {
     return res.status(500).json({ message: 'Error en el servidor' });
@@ -101,23 +101,53 @@ app.post("/api/login", async (req, res) => {
 
 app.get('/authorizer', (req, res) => {
   try {
-    const bearerToken = req.headers["authorization"].split(" ")[1];
+    const accessToken = req.headers["authorization"].split(" ")[1];
+    const refreshToken = req.headers.refreshtoken;
     
-    if (typeof bearerToken === "undefined") {
-      return res.status(403).json({ error: error.message, isLogged: false });
+    if (typeof accessToken === "undefined") {
+      return res.status(403).json({ error: "Token de acceso no proporcionado", isLogged: false });
     }
-    jwt.verify(bearerToken, "secretKey", (error) => {
+    
+    jwt.verify(accessToken, "accessSecret", (error, decoded) => {
       if (error) {
-        return res.status(403).json({ error: error.message, isLogged: false, a:"a" });
+        if (error.message === "jwt expired") {
+          if (typeof refreshToken === "undefined") {
+            return res.status(403).json({ error: "Token de acceso expirado y token de actualización no proporcionado", isLogged: false });
+          }
+          
+          jwt.verify(refreshToken, "refreshSecret", (error, decoded) => {
+            if (error) {
+              if (error.message === "jwt expired") {
+                return res.status(403).json({ error: "Token de acceso y token de actualización expirados", isLogged: false });
+              } else {
+                return res.status(403).json({ error: "Error al verificar el token de actualización", isLogged: false });
+              }
+            } else {
+              const newAccessToken = jwt.sign({ userId: decoded.userId }, "accessSecret", { expiresIn: "1h" });
+              const newRefreshToken = jwt.sign({ userId: decoded.userId }, "accessSecret", { expiresIn: "8h" });
+              return res.status(200).json({ 
+                message: "Acceso permitido", 
+                isLogged: true,
+                "token":{ 
+                  accessToken: newAccessToken, 
+                  refreshToken: newRefreshToken
+                }
+              });
+            }
+          });
+        } else {
+          return res.status(403).json({ error: error.message, isLogged: false });
+        }
       } else {
         return res.status(200).json({ message: "Acceso permitido", isLogged: true });
       }
-      });
+    });
   } catch (error) {
     console.log("**********ERROR********** " + error);
     return res.status(500).send({ error: error.message });
   }
 });
+
 
 
 
