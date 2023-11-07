@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//---------------------------------------------------models--------------------------------------------------------
+
+//------------------------modelo de usuario--------------------------
+model User {
+  id   Int     @id @default(autoincrement())  // identificador de la tabla, autoincrementa
+  name String                                 // campo string
+  dni  BigInt  @unique                        // campo unico
+  email String?                               // ? indica que es nulleable
+  
+  // post  Post?  // para one to one
+  posts Post[]    // para one to many
+}
+
+
+////----------------------- modelo post--------------------------
+model Post {
+  id   Int     @id @default(autoincrement())  
+  title String                                                    
+  content String?
+  
+  // relación con la tabla user
+  userId Int @unique
+  user User @relation(fields: [userId], references: [id])
+}
+
+

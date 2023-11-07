@@ -18,9 +18,11 @@ const userController = {
           email: req.body.email,
         }
       });
-      responses.success(res, newUser, 200);
+      const msj = "Created user " + newUser;
+      responses.success(res, msj, 200);
     } catch (error) {
-      responses.error(res, error, 500);
+      const err = "Error to create user " + error;
+      responses.error(res, err, 500);
     }
   },
   //-------------------------------------------------------------

@@ -1,0 +1,16 @@
+
+instalar prisma:
+  npm i prisma -D
+
+init prisma:
+  npx prisma init
+
+correr migración
+  npx prisma migrate dev
+
+interactuar con las tablas
+  npx prisma studio
+
+
+
+

@@ -3,7 +3,6 @@ import responses from "../utilities/responses.js";
 const greetingsController = {
 
   hello: (req, res) => {
-
     responses.success(res, "Api says hello", 200);
   },
   //-------------------------------------------------------------
