@@ -58,7 +58,7 @@ async function main() {
     console.log(err);
   }
   // también existe deleteMany
-  */
+  
 
   //-----------------actualizar-----------------------------------------------------
   try {
@@ -77,16 +77,47 @@ async function main() {
   }
   // también existe updateMany
 
-  //----------------------------------------------------------------------------------------
-  // Create or update
+  //---------------Create or update-------------------------------------------------------------------
   await prisma.user.upsert({
     where: { id: 1, },
     create: { name: "user3", dni: 1234567, },
     update:{ email: "testmail@imail.com" }
-
+    
+  });
+  
+ 
+  //-------------------------------relaciones---------------------------------------------------------
+  
+  //crea un post relacionado con el user id:1
+  await prisma.post.create({
+    data: {
+      title: "test post",
+      user: { //modelo user
+        connect: {id: 1}
+      }
+    },
   });
 
+  // crear post desde usuario
+  await prisma.user.create({
+    data:{
+      name: "user99",
+      dni: 77777777,
+      posts: { //accede al modelo posts
+        create: { title: "post creado con usuario"}
+      }
+    },
+  });
 
+  //obtener todos los usuarios con sus post respectivos
+  await prisma.user.findMany({
+    include: {
+      posts: true
+    }
+  });
+  */
+
+  console.log("test 1");
 }
 
 main();

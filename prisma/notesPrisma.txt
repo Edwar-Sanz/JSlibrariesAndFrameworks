@@ -1,4 +1,19 @@
 
+configurar typescript:
+  instalar:
+    npm i typescript ts-node-dev @types/node -D
+
+  cambiar en el archivo tsconfig.json:
+    "rootDir": "./", 
+    "outDir": "./dist"
+
+  configurar "scripts" en el package.json:
+    "dev": "ts-node-dev --respawn index.ts"
+  
+  ejecutar comando:
+    npm run dev
+
+//-------------------------------------------------------
 instalar prisma:
   npm i prisma -D
 
