@@ -3,7 +3,7 @@ configurar typescript:
   instalar:
     npm i typescript ts-node-dev @types/node -D
 
-  cambiar en el archivo tsconfig.json:
+  cambiar en el archivo tsconfig.json: npx tsc --init
     "rootDir": "./", 
     "outDir": "./dist"
 
