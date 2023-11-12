@@ -13,10 +13,11 @@ datasource db {
 
 //--------------------user model-----------------------
 model User {
-  id   Int     @id @default(autoincrement()) 
-  name String                                 
-  dni  BigInt  @unique                        
-                   
+  id         Int     @id @default(autoincrement()) 
+  name       String                                 
+  dni        BigInt  @unique                        
+  password   String        
+        
   // relation with post
   posts Post[]
 }
