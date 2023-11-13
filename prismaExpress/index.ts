@@ -1,5 +1,6 @@
 import express from 'express';
 import userRoutes from './src/routes/userRoutes';
+import authRoutes from './src/routes/authRoutes';
 import { config } from 'dotenv'; config();
 
 
@@ -9,7 +10,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(userRoutes);
+app.use(userRoutes, authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor Express en ejecución en http://localhost:${PORT}`);

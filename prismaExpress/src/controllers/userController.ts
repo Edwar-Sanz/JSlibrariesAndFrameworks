@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { config } from 'dotenv'; config();
+import { isAuthenticated } from '../app/authUser';
+
 
 const prisma = new PrismaClient();
 const ROUNDS =  process.env.ROUNDS || 10;
@@ -11,6 +13,14 @@ class UserController {
 
   //---------------------------------------------------------------
   async getAllUsers(req: Request, res: Response) {
+    const autho = await isAuthenticated(req);
+    if (autho?.auth == false) {
+      return res.status(401).json({ 
+        message: autho.message 
+      
+      });
+    }
+    console.log("usuario autenticado", autho?.message);
     const users = await prisma.user.findMany();
     res.json(users);
   }
@@ -34,11 +44,11 @@ class UserController {
   //---------------------------------------------------------------
   async createUser(req: Request, res: Response) {
     //----------data------------
-    const { name, dni } = req.body;
+    const { name } = req.body;
     const password: string = await bcrypt.hash(req.body.password, ROUNDS)
     //----------create----------
     const newUser = await prisma.user.create({
-      data: { name, dni, password },
+      data: { name, password },
     });
     //---------res--------------
     res.json(newUser);
@@ -48,11 +58,11 @@ class UserController {
   async updateUser(req: Request, res: Response) {
     //----------data------------
     const { id } = req.params;
-    const { name, dni } = req.body;
+    const { name } = req.body;
     //---------update-----------
     const updatedUser = await prisma.user.update({
       where: { id: parseInt(id) },
-      data: { name, dni },
+      data: { name },
     });
     //---------res--------------
     res.json(updatedUser);

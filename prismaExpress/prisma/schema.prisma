@@ -14,8 +14,7 @@ datasource db {
 //--------------------user model-----------------------
 model User {
   id         Int     @id @default(autoincrement()) 
-  name       String                                 
-  dni        BigInt  @unique                        
+  name       String   @unique                              
   password   String        
         
   // relation with post
