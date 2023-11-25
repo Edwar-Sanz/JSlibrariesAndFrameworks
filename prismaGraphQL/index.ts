@@ -1,14 +1,18 @@
 import { createYoga } from 'graphql-yoga'
-import { createServer } from 'http'
 import { schema } from './src/schema'
+import express from 'express'
 
+//----config graphql Endpoint---
 const yoga = createYoga({
   graphqlEndpoint: '/',
   schema,
-})
+  graphiql: true
+});
+//-------server configs---------
+const app = express();
+app.use(yoga)
 
-const server = createServer(yoga)
-
-server.listen(4000, () => {
+//-------run server------------
+app.listen(4000, () => {
   console.log(`Server ready at: http://localhost:4000`)
-})
+});

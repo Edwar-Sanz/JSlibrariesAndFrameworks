@@ -1,18 +1,31 @@
-import { makeExecutableSchema } from '@graphql-tools/schema'
- 
-const typeDefinitions = /* GraphQL */ `
-  type Query {
-    hello: String!
+import { createSchema  } from 'graphql-yoga'
+import { resolvers } from './resolvers'
+
+//--------------------------------
+/* 
+los tipos en GraphQL son parecidos
+a las rutas, estos tipos representan 
+los datos que se pueden recuperar 
+desde el servidor.
+
+*/
+const typeDefs =
+// Esto es sintaxis de graphql
+  `type Query {
+      hello: String
+      num: Int
+      helloWithParam(name: String!): String
+      testObjects: [TestObjects]
+    }
+  type TestObjects{ 
+    id: ID
+    name: String
+    phone: Int
   }
-`
- 
-const resolvers = {
-  Query: {
-    hello: () => 'Hello World!'
-  }
-}
- 
-export const schema = makeExecutableSchema({
+
+  `
+//--------------------------------
+export const schema = createSchema({
   resolvers: [resolvers],
-  typeDefs: [typeDefinitions]
+  typeDefs: [typeDefs]
 })
