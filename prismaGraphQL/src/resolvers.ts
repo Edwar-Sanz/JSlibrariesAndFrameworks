@@ -1,4 +1,6 @@
-import { test1, TestItem } from "./helpers/testObjects"
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 
 /*
@@ -12,13 +14,10 @@ import { test1, TestItem } from "./helpers/testObjects"
 export const resolvers = {
   Query: {
     hello: (): string => 'Hello World!!!',
-    num: (): number => 1,
-    // helloWithParam(root: any, args: any){
-    //   return `Hello ${args.name}`
-    // }
-    helloWithParam(root: any, { name }: { name: string }): string{
-      return `Hello ${name}`
-    },
-    testObjects: (): TestItem[] => test1
+    getAllUsers: async()=> await prisma.user.findMany(),
+    getUserById: async(root: any, args: any)=> await prisma.user.findUnique({where: { id: parseInt(args.id) }})
+  },
+  Mutation: {
+    createUser: async(root: any, { input }: { input: { name: string, password: string } })=> await prisma.user.create({ data: { name:input.name , password: input.password } })
   }
 }

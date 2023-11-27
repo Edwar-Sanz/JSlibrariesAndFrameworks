@@ -1,0 +1,27 @@
+query{
+  hello
+}
+
+query{
+  getUserById(id: 1){
+    name
+  }
+}
+
+query{
+  getAllUsers{
+    name
+  }
+}
+
+
+mutation{
+  createUser(
+    input: {
+      name: "user3"
+      password: "123"
+    }
+  ){
+    name
+  }
+}
