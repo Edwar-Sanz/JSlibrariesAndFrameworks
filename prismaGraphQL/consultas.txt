@@ -1,20 +1,32 @@
 query{
   hello
 }
-
+//----------------------------------------------------
 query{
   getUserById(id: 1){
     name
   }
 }
 
+//----------------------------------------------------
 query{
   getAllUsers{
     name
   }
 }
+//----------------------------------------------------
+fragment testFragment on User{
+  id
+  name 
+}
+query{
+  getAllUsers{
+    	...testFragment
+  }
+  
+}
 
-
+//----------------------------------------------------
 mutation{
   createUser(
     input: {
