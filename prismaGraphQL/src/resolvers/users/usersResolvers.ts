@@ -1,13 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import User from "./User";
 
-const prisma = new PrismaClient();
+const user = new User();
 
 export const userResolvers = {
   Query: {
-    getAllUsers: async()=> await prisma.user.findMany(),
-    getUserById: async(root: any, args: any)=> await prisma.user.findUnique({where: { id: parseInt(args.id) }})
+    getAllUsers: user.getAllUsers,
+    getUserById: user.getUserById
   },
   Mutation: {
-    createUser: async(root: any, { input }: { input: { name: string, password: string } })=> await prisma.user.create({ data: { name:input.name , password: input.password } })
+    createUser: user.createUser
   }
 }

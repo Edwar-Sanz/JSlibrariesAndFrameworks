@@ -4,6 +4,6 @@ const hello = new Hello();
 
 export const helloResolvers = {
   Query: {
-    hello: hello.sayHello
+    sayHello: hello.sayHello
   }
 }
