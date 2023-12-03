@@ -26,7 +26,7 @@ class User {
       const result: UserInterface[] = await prisma.user.findMany();
       return res.success(result, "ok");
     } catch (error) {
-      return res.error("fail to get users.  Error: " + error , 500);
+      return res.error("Fail to get users.  Error: " + error , 500);
     }
     
   }
@@ -45,7 +45,7 @@ class User {
       }
       return res.success(result, "ok");
     } catch (error) {
-      return res.error("fail to get user.  Error: " + error , 500);
+      return res.error("Fail to get user.  Error: " + error , 500);
     }
   }
 
@@ -65,9 +65,9 @@ class User {
 
       const result: UserInterface | null = await prisma.user.create({ data: userData });
       if (!result) {
-        return res.error("User not found!" , 404);
+        return res.error("User not created" , 500);
       }
-      return res.success(result, "ok");
+      return res.success(result, "User created successfully");
     } catch (error) {
       return res.error("fail to create user.  Error: " + error , 500);
     }
