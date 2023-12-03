@@ -1,13 +1,24 @@
 type Query {
-  hello: String
-  getUserById(id: ID!): User
-  getAllUsers: [User]
-  
+  getUserById(id: ID!): UserRes
+  getAllUsers: AllUserRes
 }
 
 type Mutation {
-  createUser(input: UserData): User
+  createUser(input: UserData): UserRes
+}
 
+type UserRes {
+  success: Boolean
+  result: User
+  message: String
+  statusCode: Int
+}
+
+type AllUserRes {
+  success: Boolean
+  result: [User]
+  message: String
+  statusCode: Int
 }
 
 type User {
@@ -19,10 +30,4 @@ type User {
 input UserData {
   name: String!
   password: String!
-}
-
-enum Area {
-  administrativa
-  comercial
-  produccion
 }
