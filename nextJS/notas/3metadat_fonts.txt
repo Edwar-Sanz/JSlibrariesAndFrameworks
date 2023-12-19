@@ -1,0 +1,10 @@
+se puede usar metadata para no usar etiquet head directamente y 
+tambiar para cargar variables de forma dinámica
+
+  export const metadata = {
+    title: 'Test next',
+    description: 'App para probar nextJS',
+  }
+
+se pueden importar las fuentes de la siguiente manera
+  import {nombreFuente} from "next/font/google"

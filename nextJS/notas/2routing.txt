@@ -1,0 +1,11 @@
+Las rutas en next se crean basadas en los archivos
+cada carpeta es una ruta y renderiza el archivo page.js
+
+se puede usar la etiqueta <a> pero esto hace que cargue toda
+la página, en su lugar usar el componente Link
+
+Cada página puede tener a su ves un layout, util para evitar
+importar componentes en todos los children
+
+se puede crear una página not found creando un archivo
+  not-found.js

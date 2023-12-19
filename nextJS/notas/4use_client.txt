@@ -1,0 +1,2 @@
+se debe poner "use client" en los componentes que manejen
+estados o eventos ya que se renderizan del lado del cliente
