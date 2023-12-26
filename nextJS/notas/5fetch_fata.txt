@@ -1,0 +1,3 @@
+Se puede usar fetch creando funciones y llamandolas en los componentes
+
+se puede usar el archivo loading.jsx para esperar los datos

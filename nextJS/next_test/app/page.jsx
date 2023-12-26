@@ -11,7 +11,7 @@ export default function IndexHome() {
             <Link href="/cursos">cursos</Link>
           </li>
           <li>
-            <Link href="/tienda">tienda</Link>
+            <Link href="/users">users</Link>
           </li>
         </ul>
         <Button/>
