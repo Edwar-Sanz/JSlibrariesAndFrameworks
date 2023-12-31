@@ -3,3 +3,6 @@ de se usan los [id] en el nombre de la carpeta
 
 esto permite acceder a los parámetros de la url
 desde el componente
+
+otra forma es usar el hook useParams
+import { useParams } from "next/navigation";
