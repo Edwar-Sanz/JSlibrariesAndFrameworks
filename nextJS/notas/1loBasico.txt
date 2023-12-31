@@ -10,3 +10,5 @@ ejemplo de configuraciones
   √ Would you like to use App Router? (recommended) ... No / Yes*
   √ Would you like to customize the default import alias (@/*)? ... No* / Yes
 
+para importar en next se puede usar el @ que es un
+alias a la ruta del proyecto

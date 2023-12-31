@@ -1,0 +1,5 @@
+para crear una página que tenga parámetros
+de se usan los [id] en el nombre de la carpeta
+
+esto permite acceder a los parámetros de la url
+desde el componente
