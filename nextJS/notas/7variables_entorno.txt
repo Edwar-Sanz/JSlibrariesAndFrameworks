@@ -1,0 +1,4 @@
+next permite usar variables de entorno
+ para acceder a estas variables
+
+  process.env.NOMBRE_VARIABLE

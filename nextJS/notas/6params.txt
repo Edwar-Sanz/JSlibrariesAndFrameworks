@@ -6,3 +6,19 @@ desde el componente
 
 otra forma es usar el hook useParams
 import { useParams } from "next/navigation";
+
+
+//------------------------------------------------------------------------
+
+para obtener los parámetros de búsqueda se usa el hook useSearchParams 
+ejemplo:
+  dada la url // URL -> `/users?name=julio`
+
+'use client'
+import { useSearchParams } from 'next/navigation'
+
+export default function SearchBar() {
+  const searchParams = useSearchParams()
+  const search = searchParams.get('name')
+  return <>Search: {search}</> //esto retorna julio
+}
