@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { config } from 'dotenv'; config();
-import { isAuthenticated } from '../app/authUser';
 
 const prisma = new PrismaClient();
 

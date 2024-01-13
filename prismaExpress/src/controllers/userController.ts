@@ -2,25 +2,15 @@ import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { config } from 'dotenv'; config();
-import { isAuthenticated } from '../app/authUser';
-
 
 const prisma = new PrismaClient();
-const ROUNDS =  process.env.ROUNDS || 10;
+const ROUNDS =  Number(process.env.ROUNDS)
 
 
 class UserController {
 
   //---------------------------------------------------------------
   async getAllUsers(req: Request, res: Response) {
-    const autho = await isAuthenticated(req);
-    if (autho?.auth == false) {
-      return res.status(401).json({ 
-        message: autho.message 
-      
-      });
-    }
-    console.log("usuario autenticado", autho?.message);
     const users = await prisma.user.findMany();
     res.json(users);
   }
@@ -43,26 +33,39 @@ class UserController {
 
   //---------------------------------------------------------------
   async createUser(req: Request, res: Response) {
-    //----------data------------
-    const { name } = req.body;
-    const password: string = await bcrypt.hash(req.body.password, ROUNDS)
-    //----------create----------
-    const newUser = await prisma.user.create({
-      data: { name, password },
-    });
-    //---------res--------------
-    res.json(newUser);
+    try {
+      const { name, password } = req.body;
+      if (name && password) {
+        //--------validate existing--------------
+        const existingUser = await prisma.user.findUnique({ where: { name }, });
+        if (existingUser) { return res.status(400).json({ message: 'El usuario ya existe' }); }
+    
+        //------register if not existing---------
+        const hashedPassword = await bcrypt.hash(password, ROUNDS);
+        const newUser = await prisma.user.create({ data: { name, password: hashedPassword },});
+        return res.status(200).json({
+          user: newUser,
+          message: 'Creado correctamente' 
+        });
+      }
+      return res.status(400).json({ message: 'Solicitud incorrecta, faltan datos, requeridos-> name, password' });
+      
+    } catch (error: any) {
+      res.status(400).json({ message: `No se pudo procesar la solicitud, ERROR: ${error.message}` });
+    }
+    
   }
 
   //---------------------------------------------------------------
   async updateUser(req: Request, res: Response) {
     //----------data------------
     const { id } = req.params;
-    const { name } = req.body;
+    let { name, password } = req.body;
+    password = await bcrypt.hash(req.body.password, ROUNDS)
     //---------update-----------
     const updatedUser = await prisma.user.update({
       where: { id: parseInt(id) },
-      data: { name },
+      data: { name, password },
     });
     //---------res--------------
     res.json(updatedUser);
